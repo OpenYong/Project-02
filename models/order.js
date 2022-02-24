@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
   {
-    userData: {
-      type: String,
-      required: true,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     cartItem: {
       type: String,

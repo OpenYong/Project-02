@@ -14,7 +14,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  status: { type: String, required: true },
+  signupDate: { type: String, default: "test날짜!" },
   shops: [
     {
       type: Schema.Types.ObjectId,

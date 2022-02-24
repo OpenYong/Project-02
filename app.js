@@ -23,6 +23,14 @@ app.use((req, res, next) => {
 app.use("/shop", shopRoutes);
 app.use("/auth", authRoutes);
 
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message, data });
+});
+
 mongoose
   .connect(MONGO_URI)
   .then((result) => {
