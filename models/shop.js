@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const shopSchema = new Schema(
   {
     ownerId: {
-      type: Object,
-      required: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     shopName: {
       type: String,

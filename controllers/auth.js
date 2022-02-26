@@ -64,7 +64,11 @@ exports.login = (req, res, next) => {
         "signbyyong",
         { expiresIn: "1h" }
       );
-      res.status(200).json({ token: token, userId: userInfo._id.toString() });
+      res.status(200).json({
+        token: token,
+        userId: userInfo._id.toString(),
+        expiresIn: "3600", // expTime(in second)
+      });
     })
     .catch((e) => {
       if (!e.statusCode) {
