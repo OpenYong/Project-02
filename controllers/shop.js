@@ -4,8 +4,7 @@ const path = require("path");
 
 const Shop = require("../models/shop");
 const User = require("../models/user");
-
-const user = require("../models/user");
+const Menu = require("../models/menu");
 
 exports.getShopsData = (req, res, next) => {
   Shop.find()
@@ -39,6 +38,7 @@ exports.getShop = (req, res, next) => {
     });
 };
 
+// CREATE SHOP
 exports.registerShop = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -101,6 +101,7 @@ exports.getMyShops = (req, res, next) => {
     });
 };
 
+// UPDATE SHOP
 exports.updateShop = (req, res, next) => {
   const userId = req.userId;
   const shopId = req.params.shopId;
@@ -143,6 +144,7 @@ exports.updateShop = (req, res, next) => {
     });
 };
 
+// DELETE SHOP
 exports.deleteShop = (req, res, next) => {
   const userId = req.userId;
   const shopId = req.params.shopId;
@@ -164,4 +166,42 @@ exports.deleteShop = (req, res, next) => {
       res.status(200).json({ message: "데이터 삭제 완료" });
     })
     .catch();
+};
+
+//CREATE MENU
+exports.registerMenu = (req, res, next) => {
+  const shopId = req.params.shopId;
+  const menu = new Menu({
+    name: req.userId,
+    description: req.body.name,
+    imageUrl: req.file.path,
+    price: req.body.price,
+    shop: shopId,
+  });
+  menu
+    .save()
+    .then((result) => {
+      return Shop.findById(shopId);
+    })
+    .then((shop) => {
+      console.log(shop);
+      if (!shop.menu) {
+        shop.menu = menu;
+      } else {
+        shop.menu.push(menu);
+      }
+      return shop.save();
+    })
+    .then((result) => {
+      res.status(201).json({
+        message: "메뉴 등록 완료",
+        menu: menu,
+      });
+    })
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
 };

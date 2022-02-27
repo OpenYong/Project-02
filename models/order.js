@@ -7,12 +7,8 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    cartItem: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
+    orderedMenuItems: {
+      type: Array,
       required: true,
     },
     status: { type: String, required: true },
@@ -20,12 +16,6 @@ const orderSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Shop",
-      },
-    ],
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
       },
     ],
   },
