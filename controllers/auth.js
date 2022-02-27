@@ -77,3 +77,22 @@ exports.login = (req, res, next) => {
       next(e);
     });
 };
+
+// exports.getUserInfo = (req, res, next) => {
+//   const userId = req.userId;
+//   User.findById(userId)
+//     .then((userData) => {
+//       if (!userData) {
+//         const error = new Error("저장된 데이터 없음");
+//         error.statusCode = 404;
+//         throw error;
+//       }
+//       res.status(200).json({ user: userData });
+//     })
+//     .catch((e) => {
+//       if (!e.statusCode) {
+//         e.statusCode = 500;
+//       }
+//       next(e);
+//     });
+// };

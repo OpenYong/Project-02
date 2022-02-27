@@ -1,10 +1,11 @@
 const express = require("express");
+const router = express.Router();
+const isAuth = require("../middleware/authentication");
+
 const { body } = require("express-validator/check");
 
 const User = require("../models/user");
 const authController = require("../controllers/auth");
-
-const router = express.Router();
 
 router.put(
   "/signup",
@@ -27,5 +28,7 @@ router.put(
 );
 
 router.post("/login", authController.login);
+
+// router.get("/info", isAuth, authController.getUserInfo);
 
 module.exports = router;
