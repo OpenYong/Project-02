@@ -142,3 +142,26 @@ exports.updateShop = (req, res, next) => {
       next(e);
     });
 };
+
+exports.deleteShop = (req, res, next) => {
+  const userId = req.userId;
+  const shopId = req.params.shopId;
+
+  Shop.findById(shopId)
+    .then((shopData) => {
+      if (!shopData) {
+        const error = new Error("저장된 데이터 없음");
+        error.statusCode = 404;
+        throw error;
+      }
+      imagePath = path.join(__dirname, "..", shopData.imageUrl);
+      fs.unlink(imagePath, (e) => console.log(e));
+
+      return Shop.findByIdAndRemove(shopId);
+    })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "데이터 삭제 완료" });
+    })
+    .catch();
+};

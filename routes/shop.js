@@ -32,4 +32,6 @@ router.put(
   shopController.updateShop
 );
 
+router.delete("/list/:shopId", isAuth, shopController.deleteShop);
+
 module.exports = router;
