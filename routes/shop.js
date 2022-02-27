@@ -34,6 +34,13 @@ router.put(
 
 router.delete("/list/:shopId", isAuth, shopController.deleteShop);
 
+// CRUD Menu
 router.post("/menu/:shopId", isAuth, shopController.registerMenu);
+
+router.get("/menu/:shopId", shopController.getMenu);
+
+router.put("/menu/:menuId", isAuth, shopController.updateMenu);
+
+router.delete("/menu/:menuId", isAuth, shopController.deleteShop);
 
 module.exports = router;

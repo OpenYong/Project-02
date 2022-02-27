@@ -128,9 +128,9 @@ exports.updateShop = (req, res, next) => {
         fs.unlink(imagePath, (e) => console.log(e));
       }
       shopData.description = req.body.description;
-      (shopData.hasTables = req.body.hasTables),
-        (shopData.hasParkingLot = req.body.hasParkingLot),
-        (shopData.imageUrl = req.file.path);
+      shopData.hasTables = req.body.hasTables;
+      shopData.hasParkingLot = req.body.hasParkingLot;
+      shopData.imageUrl = req.file.path;
       return shopData.save();
     })
     .then((result) => {
@@ -163,17 +163,22 @@ exports.deleteShop = (req, res, next) => {
     })
     .then((result) => {
       console.log(result);
-      res.status(200).json({ message: "데이터 삭제 완료" });
+      res.status(200).json({ message: "데이터 삭제 완료." });
     })
-    .catch();
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
 };
 
-//CREATE MENU
+// CREATE Menu
 exports.registerMenu = (req, res, next) => {
   const shopId = req.params.shopId;
   const menu = new Menu({
-    name: req.userId,
-    description: req.body.name,
+    name: req.name,
+    description: req.body.description,
     imageUrl: req.file.path,
     price: req.body.price,
     shop: shopId,
@@ -197,6 +202,92 @@ exports.registerMenu = (req, res, next) => {
         message: "메뉴 등록 완료",
         menu: menu,
       });
+    })
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
+};
+
+// READ Menu
+exports.getMenu = (req, res, next) => {
+  const shopId = req.params.shopId;
+
+  Shop.findById(shopId)
+    .then((shopData) => {
+      if (!shopData) {
+        const error = new Error("저장된 데이터 없음");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ menu: shopData.menu });
+    })
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
+};
+
+// UPDATE Menu
+exports.updateMenu = (req, res, next) => {
+  const menuId = req.params.menuId;
+
+  if (!req.file) {
+    const error = new Error("이미지 없음");
+    error.statusCode = 422;
+    throw error;
+  }
+
+  Menu.findById(menuId)
+    .then((menuData) => {
+      if (!menuData) {
+        const error = new Error("저장된 데이터 없음");
+        error.statusCode = 404;
+        throw error;
+      }
+      if (menuData.imageUrl !== req.file.path) {
+        imagePath = path.join(__dirname, "..", menuData.imageUrl);
+        fs.unlink(imagePath, (e) => console.log(e));
+      }
+      menuData.description = req.body.description;
+      menuData.price = req.body.price;
+      menuData.imageUrl = req.file.path;
+      return menuData.save();
+    })
+    .then((result) => {
+      res.status(200).json({ menu: result });
+    })
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
+};
+
+// DELETE Menu
+exports.DeleteMenu = (req, res, next) => {
+  const menuId = req.params.menuId;
+
+  Menu.findById(menuId)
+    .then((menuData) => {
+      if (!menuData) {
+        const error = new Error("저장된 데이터 없음");
+        error.statusCode = 404;
+        throw error;
+      }
+      imagePath = path.join(__dirname, "..", menuData.imageUrl);
+      fs.unlink(imagePath, (e) => console.log(e));
+
+      return Menu.findByIdAndRemove(menuId);
+    })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "데이터 삭제 완료." });
     })
     .catch((e) => {
       if (!e.statusCode) {
