@@ -82,6 +82,7 @@ exports.registerShop = (req, res, next) => {
     });
 };
 
+//READ Shops(:userId)
 exports.getMyShops = (req, res, next) => {
   const userId = req.userId;
   Shop.find({ ownerId: userId })
@@ -163,6 +164,10 @@ exports.deleteShop = (req, res, next) => {
     })
     .then((result) => {
       console.log(result);
+      return Menu.remove({ shop: shopId });
+    })
+    .then((result) => {
+      console.log(result);
       res.status(200).json({ message: "데이터 삭제 완료." });
     })
     .catch((e) => {
@@ -171,13 +176,16 @@ exports.deleteShop = (req, res, next) => {
       }
       next(e);
     });
+
+  // Menu.find({ shop: userId })
+  // .then
 };
 
 // CREATE Menu
 exports.registerMenu = (req, res, next) => {
   const shopId = req.params.shopId;
   const menu = new Menu({
-    name: req.name,
+    name: req.body.name,
     description: req.body.description,
     imageUrl: req.file.path,
     price: req.body.price,

@@ -10,6 +10,7 @@ const multer = require("multer");
 
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 const app = express();
 const port = 8080;
@@ -50,8 +51,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/shop", shopRoutes);
 app.use("/auth", authRoutes);
+app.use("/shop", shopRoutes);
+app.use("/user", userRoutes);
 
 // 모든 에러 발생시 이 미들웨어에서 캐치하도록 함
 app.use((error, req, res, next) => {

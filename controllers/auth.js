@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const { validationResult } = require("express-validator/check");
+const Cart = require("../models/cart");
+const user = require("../models/user");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
@@ -24,6 +26,12 @@ exports.signup = (req, res, next) => {
         password: hashedPassword,
       });
       return user.save();
+    })
+    .then((result) => {
+      const cart = new Cart({ userId: result._id });
+      cart.save();
+      result.cart = cart;
+      return result.save();
     })
     .then((result) => [
       res.status(201).json({ message: "회원 가입 완료", userId: result._id }),
