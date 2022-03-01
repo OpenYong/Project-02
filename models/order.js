@@ -7,17 +7,30 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    orderedMenuItems: {
-      type: Array,
+    tel: {
+      type: String,
       required: true,
     },
+    orderedItems: {
+      type: Schema.Types.Array,
+      required: true,
+    },
+    totalAmount: { type: Number, required: true },
+    request: {
+      type: String,
+    },
     status: { type: String, required: true },
-    shops: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Shop",
-      },
-    ],
+    shop: {
+      type: Schema.Types.ObjectId,
+      ref: "Shop",
+    },
+    shopName: {
+      type: String,
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

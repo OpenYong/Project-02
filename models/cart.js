@@ -14,6 +14,11 @@ const cartSchema = new Schema(
     },
     totalAmount: {
       type: Number,
+      required: true,
+    },
+    shopId: {
+      type: Schema.Types.ObjectId,
+      ref: "Shop",
     },
   },
   { timestamps: true }

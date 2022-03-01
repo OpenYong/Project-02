@@ -12,4 +12,9 @@ router.get("/cart", isAuth, userController.getCart);
 
 router.put("/cart", isAuth, userController.updateCart);
 
+router.post("/order/:shopId", isAuth, userController.createOrder);
+
+router.get("/order", isAuth, userController.getOrder);
+// router.put("/order", isAuth, userController.updateOrder);
+
 module.exports = router;

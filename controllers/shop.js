@@ -5,6 +5,7 @@ const path = require("path");
 const Shop = require("../models/shop");
 const User = require("../models/user");
 const Menu = require("../models/menu");
+const user = require("../models/user");
 
 exports.getShopsData = (req, res, next) => {
   Shop.find()
@@ -162,12 +163,17 @@ exports.deleteShop = (req, res, next) => {
 
       return Shop.findByIdAndRemove(shopId);
     })
+    .then(() => {
+      return User.findById(userId);
+    })
+    .then((user) => {
+      user.shops.pull(shopId);
+      return user.save();
+    })
     .then((result) => {
-      console.log(result);
       return Menu.remove({ shop: shopId });
     })
     .then((result) => {
-      console.log(result);
       res.status(200).json({ message: "데이터 삭제 완료." });
     })
     .catch((e) => {
@@ -280,6 +286,7 @@ exports.updateMenu = (req, res, next) => {
 // DELETE Menu
 exports.DeleteMenu = (req, res, next) => {
   const menuId = req.params.menuId;
+  const userId = req.userId;
 
   Menu.findById(menuId)
     .then((menuData) => {
@@ -292,6 +299,13 @@ exports.DeleteMenu = (req, res, next) => {
       fs.unlink(imagePath, (e) => console.log(e));
 
       return Menu.findByIdAndRemove(menuId);
+    })
+    .then((result) => {
+      return Shop.findOne({ ownerId: userId });
+    })
+    .then((shop) => {
+      shop.menu.pull(menuId);
+      return shop.save();
     })
     .then((result) => {
       console.log(result);
