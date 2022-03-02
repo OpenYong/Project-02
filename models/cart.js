@@ -17,8 +17,7 @@ const cartSchema = new Schema(
       required: true,
     },
     shopId: {
-      type: Schema.Types.ObjectId,
-      ref: "Shop",
+      type: String,
     },
   },
   { timestamps: true }

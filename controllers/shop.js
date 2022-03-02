@@ -229,14 +229,14 @@ exports.registerMenu = (req, res, next) => {
 exports.getMenu = (req, res, next) => {
   const shopId = req.params.shopId;
 
-  Shop.findById(shopId)
-    .then((shopData) => {
-      if (!shopData) {
+  Menu.find({ shop: shopId })
+    .then((menuData) => {
+      if (!menuData) {
         const error = new Error("저장된 데이터 없음");
         error.statusCode = 404;
         throw error;
       }
-      res.status(200).json({ menu: shopData.menu });
+      res.status(200).json({ menu: menuData });
     })
     .catch((e) => {
       if (!e.statusCode) {
@@ -284,7 +284,7 @@ exports.updateMenu = (req, res, next) => {
 };
 
 // DELETE Menu
-exports.DeleteMenu = (req, res, next) => {
+exports.deleteMenu = (req, res, next) => {
   const menuId = req.params.menuId;
   const userId = req.userId;
 
@@ -307,8 +307,7 @@ exports.DeleteMenu = (req, res, next) => {
       shop.menu.pull(menuId);
       return shop.save();
     })
-    .then((result) => {
-      console.log(result);
+    .then(() => {
       res.status(200).json({ message: "데이터 삭제 완료." });
     })
     .catch((e) => {

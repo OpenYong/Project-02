@@ -19,10 +19,12 @@ const shopSchema = new Schema(
     description: { type: String, required: true },
     hasParkingLot: { type: Boolean, required: true },
     hasTables: { type: Boolean, required: true },
-    menu: {
-      type: Schema.Types.Array,
-      ref: "Menu",
-    },
+    menu: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Menu",
+      },
+    ],
   },
   { timestamps: true }
 );

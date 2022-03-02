@@ -41,6 +41,6 @@ router.get("/menu/:shopId", shopController.getMenu);
 
 router.put("/menu/:menuId", isAuth, shopController.updateMenu);
 
-router.delete("/menu/:menuId", isAuth, shopController.deleteShop);
+router.delete("/menu/:menuId", isAuth, shopController.deleteMenu);
 
 module.exports = router;
