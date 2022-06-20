@@ -28,7 +28,7 @@ exports.signup = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      const cart = new Cart({ userId: result._id });
+      const cart = new Cart({ userId: result._id, totalAmount: 0 });
       cart.save();
       result.cart = cart;
       return result.save();

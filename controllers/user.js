@@ -118,3 +118,25 @@ exports.getOrder = (req, res, next) => {
       next(e);
     });
 };
+
+// READ UserData
+exports.getUserData = (req, res, next) => {
+  const userId = req.userId;
+  // const userId = req.params.userId;
+
+  User.findOne({ user: userId })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("저장된 유저 없음");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ name: user.name, email: user.email });
+    })
+    .catch((e) => {
+      if (!e.statusCode) {
+        e.statusCode = 500;
+      }
+      next(e);
+    });
+};

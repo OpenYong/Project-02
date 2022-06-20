@@ -17,4 +17,6 @@ router.post("/order/:shopId", isAuth, userController.createOrder);
 router.get("/order", isAuth, userController.getOrder);
 // router.put("/order", isAuth, userController.updateOrder);
 
+router.get("/account/profile", isAuth, userController.getUserData);
+
 module.exports = router;

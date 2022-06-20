@@ -28,6 +28,10 @@ const userSchema = new Schema(
       },
     ],
     cart: { type: Schema.Types.ObjectId, ref: "Cart" },
+    isShopOwner: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
